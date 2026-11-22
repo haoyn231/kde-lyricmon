@@ -25,7 +25,7 @@
 
 A KDE Plasma 6 plasmoid that shows the lyrics of whatever is playing, in the panel, with the current line highlighted. Click it for cover art, scrolling lyrics and playback controls.
 
-All track information comes from [MPRIS 2.2](https://specifications.freedesktop.org/mpris-spec/latest/): any player that implements the spec (Spotify, VLC, Strawberry, Elisa, mpv, browser players…) just works — **there are no per-player adapters**. Lyrics come from the player itself (`xesam:asText`), then local `.lrc` files, then [LRCLIB](https://lrclib.net). Colours follow your system theme and accent colour.
+All track information comes from [MPRIS 2.2](https://specifications.freedesktop.org/mpris-spec/latest/): any player that implements the spec (Spotify, VLC, Strawberry, Elisa, mpv…) just works — **there are no per-player adapters**. Lyrics come from the player itself (`xesam:asText`), then local `.lrc` files, then [LRCLIB](https://lrclib.net). Colours follow your system theme and accent colour.
 
 ## Features
 
@@ -40,7 +40,8 @@ All track information comes from [MPRIS 2.2](https://specifications.freedesktop.
 - Click any lyric line to jump there (via MPRIS `SetPosition`, not simulated key presses)
 - Dragging the seek bar only updates the display; the jump happens on release
 - A source badge tells you whether the lyrics came from the player, a local file or LRCLIB
-- Multiple players: playing > paused > has a track; players with album metadata win, and a browser tab starting playback no longer steals the panel
+- Browsers (Chromium, Firefox, Plasma browser integration, …) are ignored by default: watching a video no longer steals the panel. Turn off "Ignore browsers" in the settings to show lyrics for web players too
+- Multiple music players: playing > paused > has a track; players with album metadata win
 - Pin a specific player in the settings (matched by base service name, so it survives player restarts)
 - Lyrics are cached on disk; switching songs back and forth does not hit the network again
 - All lookups, network requests and image loads are asynchronous
@@ -74,7 +75,7 @@ Uninstall with `./uninstall.sh`. Lyrics cache lives in `~/.cache/kde-lyricmon/`.
 - The line in the panel is the current lyric.
 - Click to expand the popup, click again to close.
 - Click a lyric line or drag the seek bar to jump.
-- Right-click the widget → **Configure** for the panel layout, the popup layout (classic / player), lyrics sources, extra lyrics directory, controls and the preferred player.
+- Right-click the widget → **Configure** for the panel layout, the popup layout (classic / player), lyrics sources, extra lyrics directory, controls, the preferred player and whether browsers are ignored (on by default).
 
 ### Local lyrics
 
@@ -153,7 +154,8 @@ Qt does not expose D-Bus to QML, so `PropertiesChanged` and friends are unreacha
 - Plasma 6 only (Wayland and X11).
 - No word-by-word (karaoke) highlighting; `<mm:ss.xx>` tags are stripped and lines sync as a whole.
 - A few players always report `Position` as 0; the position is then extrapolated from the track change and may drift slightly over long playback.
-- Browser players only report what the site gives them — often no artist or album, so lyrics go through fuzzy search.
+- Browser detection uses the MPRIS service name and `Identity`; Chromium-based standalone apps (Electron etc.) share the same service name and are only ignored when their Identity also looks like a browser.
+- With "Ignore browsers" turned off, browser players only report what the site gives them — often no artist or album, so lyrics go through fuzzy search.
 - `xesam:asText` is not a standard channel for synced lyrics; formats vary (mostly plain text).
 
 ## Out of scope

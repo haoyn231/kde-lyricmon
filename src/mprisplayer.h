@@ -26,6 +26,8 @@ class MprisPlayer : public QObject
     Q_PROPERTY(QString service READ service CONSTANT)
     Q_PROPERTY(QString identity READ identity NOTIFY identityChanged)
     Q_PROPERTY(bool available READ available NOTIFY availableChanged)
+    // 该实例是否是浏览器（含网页播放器），默认不参与选主
+    Q_PROPERTY(bool browser READ isBrowser NOTIFY browserChanged)
 
     Q_PROPERTY(QString title READ title NOTIFY trackChanged)
     Q_PROPERTY(QStringList artists READ artists NOTIFY trackChanged)
@@ -55,6 +57,7 @@ public:
     QString service() const { return m_service; }
     QString identity() const { return m_identity; }
     bool available() const { return m_available; }
+    bool isBrowser() const { return m_browser; }
 
     QString title() const { return m_metadata.value(QStringLiteral("xesam:title")).toString(); }
     QStringList artists() const { return m_artists; }
@@ -90,6 +93,8 @@ public:
 signals:
     void identityChanged();
     void availableChanged();
+    // 服务名先给出一个判断，Identity 到手后可能修正（Chromium 系应用）
+    void browserChanged();
     void trackChanged();
     void positionChanged();
     void playbackStatusChanged();
@@ -104,6 +109,8 @@ private:
     void fetchIdentity();
     void fetchAll();
     void connectSignals();
+    void applyIdentity(const QString &identity);
+    void updateBrowser();
     void applyPlayerProperties(const QVariantMap &props);
     void requestPosition();
     void syncPosition(qint64 reportedMs);
@@ -121,6 +128,7 @@ private:
     qint64 m_positionMs = 0;
     qint64 m_baseMs = 0;          // 上一次对表时的位置
     bool m_available = true;
+    bool m_browser = false;
     bool m_canControl = false;
     bool m_canPlay = true;
     bool m_canPause = true;

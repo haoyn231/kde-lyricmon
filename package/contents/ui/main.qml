@@ -56,6 +56,11 @@ PlasmoidItem {
         property: "preferredService"
         value: plasmoid.configuration.preferredPlayer
     }
+    Binding {
+        target: Mpris
+        property: "ignoreBrowsers"
+        value: plasmoid.configuration.ignoreBrowsers
+    }
 
     readonly property var activePlayer: Mpris.active
 

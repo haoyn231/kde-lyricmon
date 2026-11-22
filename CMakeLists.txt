@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(kde-lyricmon VERSION 0.2.0 LANGUAGES CXX)
+project(kde-lyricmon VERSION 0.2.1 LANGUAGES CXX)
 
 # 小程序「关于」对话框读的是 package/metadata.json 里的 Version，而标签和构建走
 # 的是 CMake 的 project() 版本。两处版本漂移过一次就会一直对不上，所以在这里直接
@@ -52,6 +52,11 @@ enable_testing()
 add_executable(lyricmon-tests tests/tst_lyrics.cpp)
 target_link_libraries(lyricmon-tests PRIVATE lyricmoncore Qt6::Test)
 add_test(NAME lyricmon-tests COMMAND lyricmon-tests)
+
+# 浏览器识别是纯函数，单独一组测试，不需要 D-Bus
+add_executable(lyricmon-player-tests tests/tst_playerselection.cpp)
+target_link_libraries(lyricmon-player-tests PRIVATE lyricmoncore Qt6::Test)
+add_test(NAME lyricmon-player-tests COMMAND lyricmon-player-tests)
 
 # 离屏渲染工具：把真实数据画成 PNG，README 的截图和布局回归都靠它。
 add_executable(lyricmon-preview tools/preview.cpp)

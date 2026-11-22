@@ -61,6 +61,10 @@ QVariantList MprisRegistry::choices() const
 {
     QVariantList list;
     for (MprisPlayer *player : m_players) {
+        // 忽略浏览器时它们也不该出现在「固定播放器」列表里
+        if (m_ignoreBrowsers && player->isBrowser()) {
+            continue;
+        }
         QString label = player->identity();
         if (label.isEmpty()) {
             label = player->service().section(QLatin1Char('.'), -1);
@@ -69,6 +73,7 @@ QVariantList MprisRegistry::choices() const
             {QStringLiteral("service"), player->service()},
             {QStringLiteral("label"), label},
             {QStringLiteral("playing"), player->playing() && player->hasTrack()},
+            {QStringLiteral("browser"), player->isBrowser()},
         });
     }
     return list;
@@ -81,6 +86,18 @@ void MprisRegistry::setPreferredService(const QString &service)
     }
     m_preferred = service;
     Q_EMIT preferredServiceChanged();
+    updateActive();
+}
+
+void MprisRegistry::setIgnoreBrowsers(bool ignore)
+{
+    if (m_ignoreBrowsers == ignore) {
+        return;
+    }
+    m_ignoreBrowsers = ignore;
+    Q_EMIT ignoreBrowsersChanged();
+    // 「固定播放器」下拉框的候选也跟着变
+    Q_EMIT playersChanged();
     updateActive();
 }
 
@@ -132,6 +149,11 @@ void MprisRegistry::addService(const QString &service)
     connect(player, &MprisPlayer::trackChanged, this, &MprisRegistry::updateActive);
     connect(player, &MprisPlayer::playbackStatusChanged, this, &MprisRegistry::updateActive);
     connect(player, &MprisPlayer::identityChanged, this, &MprisRegistry::playersChanged);
+    // Identity 可能会把 Chromium 系应用从「浏览器」改回普通播放器，反过来也一样
+    connect(player, &MprisPlayer::browserChanged, this, [this]() {
+        Q_EMIT playersChanged();
+        updateActive();
+    });
     connect(player, &MprisPlayer::availableChanged, this, [this, player]() {
         if (!player->available()) {
             removeService(player->service());
@@ -163,6 +185,11 @@ void MprisRegistry::removeService(const QString &service)
     }
 }
 
+bool MprisRegistry::eligible(const MprisPlayer *player) const
+{
+    return player && !(m_ignoreBrowsers && player->isBrowser());
+}
+
 void MprisRegistry::updateActive()
 {
     MprisPlayer *best = nullptr;
@@ -170,14 +197,15 @@ void MprisRegistry::updateActive()
     // 用户固定了播放器就用它（除非它连歌都没有）
     if (!m_preferred.isEmpty()) {
         for (MprisPlayer *player : m_players) {
-            if (player->service() == m_preferred && player->hasTrack()) {
+            if (player->service() == m_preferred && eligible(player) && player->hasTrack()) {
                 best = player;
                 break;
             }
         }
         if (!best) {
             for (MprisPlayer *player : m_players) {
-                if (player->hasTrack() && baseName(player->service()) == baseName(m_preferred)) {
+                if (eligible(player) && player->hasTrack()
+                    && baseName(player->service()) == baseName(m_preferred)) {
                     best = player;
                     break;
                 }
@@ -187,14 +215,15 @@ void MprisRegistry::updateActive()
 
     // 黏性：正在显示的那个只要还在放，就别因为别的播放器（比如浏览器里的
     // 一个视频标签页）也开始播放就把面板抢走
-    if (!best && m_active && m_active->hasTrack() && m_active->playing()) {
+    if (!best && eligible(m_active) && m_active->hasTrack() && m_active->playing()) {
         best = m_active;
     }
 
     if (!best) {
         // 同时有几个在放时，带专辑信息的那一个更像"音乐"
         for (MprisPlayer *player : m_players) {
-            if (player->hasTrack() && player->playing() && !player->album().isEmpty()) {
+            if (eligible(player) && player->hasTrack() && player->playing()
+                && !player->album().isEmpty()) {
                 best = player;
                 break;
             }
@@ -203,7 +232,7 @@ void MprisRegistry::updateActive()
 
     if (!best) {
         for (MprisPlayer *player : m_players) {
-            if (player->hasTrack() && player->playing()) {
+            if (eligible(player) && player->hasTrack() && player->playing()) {
                 best = player;
                 break;
             }
@@ -212,7 +241,7 @@ void MprisRegistry::updateActive()
 
     if (!best) {
         for (MprisPlayer *player : m_players) {
-            if (player->hasTrack() && !player->stopped()) {
+            if (eligible(player) && player->hasTrack() && !player->stopped()) {
                 best = player;
                 break;
             }
@@ -221,7 +250,7 @@ void MprisRegistry::updateActive()
 
     if (!best) {
         for (MprisPlayer *player : m_players) {
-            if (player->hasTrack()) {
+            if (eligible(player) && player->hasTrack()) {
                 best = player;
                 break;
             }

@@ -22,6 +22,7 @@ Kirigami.FormLayout {
     property alias cfg_showControls: controlsCheck.checked
     property alias cfg_popupLayout: layoutBox.currentValue
     property string cfg_preferredPlayer
+    property alias cfg_ignoreBrowsers: ignoreBrowsersCheck.checked
 
     Kirigami.Separator {
         Kirigami.FormData.isSection: true
@@ -142,6 +143,11 @@ Kirigami.FormLayout {
         text: i18n("显示播放控制按钮")
     }
 
+    PlasmaComponents3.CheckBox {
+        id: ignoreBrowsersCheck
+        text: i18n("忽略浏览器里的网页播放器（推荐）")
+    }
+
     PlasmaComponents3.ComboBox {
         id: playerBox
         Kirigami.FormData.label: i18n("跟随播放器：")
@@ -152,7 +158,8 @@ Kirigami.FormLayout {
             const list = [{ text: i18n("自动（正在播放的那个）"), value: "" }];
             const choices = Mpris.choices;
             for (let i = 0; i < choices.length; ++i) {
-                list.push({ text: choices[i].label, value: choices[i].service });
+                const suffix = choices[i].browser ? i18n("（浏览器）") : "";
+                list.push({ text: choices[i].label + suffix, value: choices[i].service });
             }
             return list;
         }
@@ -165,7 +172,7 @@ Kirigami.FormLayout {
     }
 
     PlasmaComponents3.Label {
-        text: i18n("同时开着音乐播放器和浏览器时，面板默认跟着「正在播放且带专辑信息」的那一个；固定一个播放器可以彻底避免被抢。")
+        text: i18n("同时开着音乐播放器和浏览器时，面板只跟随音乐播放器；浏览器里的视频、网页音乐默认被忽略，看视频不会抢走歌词。确实想让网页音乐显示歌词时，取消上面的勾选。固定一个播放器可以彻底避免被抢。")
         font: Kirigami.Theme.smallFont
         opacity: 0.65
         Layout.maximumWidth: Kirigami.Units.gridUnit * 22

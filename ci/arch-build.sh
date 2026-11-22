@@ -16,6 +16,7 @@ cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build -j"$(nproc)"
 
 ./build/lyricmon-tests
+./build/lyricmon-player-tests
 
 # QML 静态检查：能抓出拼错的属性、漏掉的 import、不可达的分支
 /usr/lib/qt6/bin/qmllint -I package/contents/lib \

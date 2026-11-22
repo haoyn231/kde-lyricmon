@@ -3,6 +3,8 @@
 
 #include "mprisplayer.h"
 
+#include "playerclassifier.h"
+
 #include <QDBusArgument>
 #include <QDBusConnection>
 #include <QDBusMessage>
@@ -72,6 +74,9 @@ MprisPlayer::MprisPlayer(const QString &service, QObject *parent)
     , m_service(service)
     , m_ticker(new QTimer(this))
 {
+    // 服务名先给一个判断；Identity 回来后会修正（Chromium 系应用共用服务名）
+    m_browser = PlayerClassifier::isBrowser(m_service);
+
     // 身份先拿一次：Identity 一般不会变，取不到就退化成服务名
     fetchIdentity();
     connectSignals();
@@ -99,11 +104,28 @@ void MprisPlayer::fetchIdentity()
                     return;
                 }
                 const QString identity = toText(reply.value().variant());
-                if (!identity.isEmpty() && identity != m_identity) {
-                    m_identity = identity;
-                    Q_EMIT identityChanged();
-                }
+                applyIdentity(identity);
             });
+}
+
+void MprisPlayer::applyIdentity(const QString &identity)
+{
+    if (identity.isEmpty() || identity == m_identity) {
+        return;
+    }
+    m_identity = identity;
+    Q_EMIT identityChanged();
+    updateBrowser();
+}
+
+void MprisPlayer::updateBrowser()
+{
+    const bool browser = PlayerClassifier::isBrowser(m_service, m_identity);
+    if (browser == m_browser) {
+        return;
+    }
+    m_browser = browser;
+    Q_EMIT browserChanged();
 }
 
 void MprisPlayer::fetchAll()
@@ -153,11 +175,7 @@ void MprisPlayer::onPropertiesChanged(const QString &interface, const QVariantMa
 {
     if (interface == QLatin1String(kRootIface)) {
         if (changed.contains(QStringLiteral("Identity"))) {
-            const QString identity = toText(changed.value(QStringLiteral("Identity")));
-            if (!identity.isEmpty() && identity != m_identity) {
-                m_identity = identity;
-                Q_EMIT identityChanged();
-            }
+            applyIdentity(toText(changed.value(QStringLiteral("Identity"))));
         }
         return;
     }
