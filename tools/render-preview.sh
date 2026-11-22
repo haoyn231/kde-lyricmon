@@ -15,8 +15,8 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
-PREVIEW="$ROOT/build/lyrics-preview"
-PLAYER="$ROOT/build/lyrics-fake-player"
+PREVIEW="$ROOT/build/lyricmon-preview"
+PLAYER="$ROOT/build/lyricmon-fake-player"
 SCALE="${SCALE:-2}"
 OUT="$ROOT/docs/images"
 

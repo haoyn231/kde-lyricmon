@@ -4,7 +4,7 @@
 // 开发用的假播放器：在会话总线上冒充一个 MPRIS 播放器。
 //
 // 为什么要它：真实播放器的进度不受控，截图和联调都不可重复。这里可以
-//   ./lyrics-fake-player --title ... --artist ... --duration 210 --lrc song.lrc
+//   ./lyricmon-fake-player --title ... --artist ... --duration 210 --lrc song.lrc
 // 起一个「正在播放」的播放器，位置随真实时间走，还能用 --position 直接跳。
 // 它也顺便充当 MPRIS 消费端的一组活体样本：Metadata / PlaybackStatus /
 // Seeked / PropertiesChanged 都按规范发出去。
@@ -234,7 +234,7 @@ int main(int argc, char *argv[])
     QCoreApplication app(argc, argv);
 
     QCommandLineParser parser;
-    parser.setApplicationDescription(QStringLiteral("Fake MPRIS player for kde-lyrics"));
+    parser.setApplicationDescription(QStringLiteral("Fake MPRIS player for kde-lyricmon"));
     parser.addHelpOption();
     const QCommandLineOption titleOpt({QStringLiteral("t"), QStringLiteral("title")},
                                       QStringLiteral("Track title"), QStringLiteral("title"),

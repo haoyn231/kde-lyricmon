@@ -14,7 +14,7 @@
 import QtQuick
 import org.kde.plasma.core as PlasmaCore
 import org.kde.plasma.plasmoid
-import "../lib/Hao/Lyrics"
+import "../lib/Hao/LyricMon"
 
 PlasmoidItem {
     id: root

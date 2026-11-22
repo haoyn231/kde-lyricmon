@@ -12,7 +12,7 @@
 import QtQuick
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
-import "../lib/Hao/Lyrics"
+import "../lib/Hao/LyricMon"
 
 Item {
     id: compact

@@ -8,7 +8,7 @@
 // 上塞一个恒等实现，组件代码就不用为了"能在预览里跑"而写一堆 typeof 判断。
 //
 // 用法：
-//   lyrics-preview tools/preview.qml -o /tmp/out.png --width 380 --height 430 --wait 3000
+//   lyricmon-preview tools/preview.qml -o /tmp/out.png --width 380 --height 430 --wait 3000
 
 #include <QGuiApplication>
 #include <QIcon>

@@ -6,7 +6,7 @@
 
 import QtQuick
 import org.kde.kirigami as Kirigami
-import "../lib/Hao/Lyrics"
+import "../lib/Hao/LyricMon"
 
 Rectangle {
     id: badge

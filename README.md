@@ -1,26 +1,26 @@
 <div align="center">
-  <h1 align="center">kde-lyrics</h1>
+  <h1 align="center">kde-lyricmon</h1>
   <p align="center">KDE Plasma 6 面板歌词：菜单栏显示当前歌词，点开看封面、滚动歌词与播放控制</p>
   <p align="center"><a href="README.en.md">English</a> | 中文</p>
 
-  <a href="https://github.com/haoyn231/kde-lyrics/releases/latest"><img src="https://img.shields.io/github/v/release/haoyn231/kde-lyrics?display_name=tag&label=Version&color=blue" alt="Version"></a>
+  <a href="https://github.com/haoyn231/kde-lyricmon/releases/latest"><img src="https://img.shields.io/github/v/release/haoyn231/kde-lyricmon?display_name=tag&label=Version&color=blue" alt="Version"></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-green" alt="MIT License"></a>
   <img src="https://img.shields.io/badge/Plasma-6-1D99F3" alt="KDE Plasma 6">
   <img src="https://img.shields.io/badge/Qt-6.5%2B-41CD52" alt="Qt 6.5+">
   <img src="https://img.shields.io/badge/MPRIS-2.2-orange" alt="MPRIS 2.2">
   <img src="https://img.shields.io/badge/Linux-x86__64-informational" alt="Linux x86_64">
   <br>
-  <a href="https://github.com/haoyn231/kde-lyrics/stargazers"><img src="https://img.shields.io/github/stars/haoyn231/kde-lyrics.svg" alt="GitHub stars"></a>
+  <a href="https://github.com/haoyn231/kde-lyricmon/stargazers"><img src="https://img.shields.io/github/stars/haoyn231/kde-lyricmon.svg" alt="GitHub stars"></a>
 </div>
 
 ---
 
 <p align="center">
-  <img width="58%" src="./docs/images/screenshot.png" alt="kde-lyrics 弹窗（经典布局）：封面、曲目信息、滚动歌词、进度条与播放控制">
+  <img width="58%" src="./docs/images/screenshot.png" alt="kde-lyricmon 弹窗（经典布局）：封面、曲目信息、滚动歌词、进度条与播放控制">
 </p>
 
 <p align="center">
-  <img width="76%" src="./docs/images/popup-player.png" alt="kde-lyrics 弹窗（播放器布局）：大封面压在左侧并带元信息，右侧是滚动歌词">
+  <img width="76%" src="./docs/images/popup-player.png" alt="kde-lyricmon 弹窗（播放器布局）：大封面压在左侧并带元信息，右侧是滚动歌词">
 </p>
 
 <p align="center">
@@ -66,12 +66,12 @@ sudo pacman -S --needed base-devel cmake qt6-base qt6-declarative libplasma kiri
 编译并安装到当前用户（不需要 root）：
 
 ```bash
-git clone https://github.com/haoyn231/kde-lyrics.git
-cd kde-lyrics
+git clone https://github.com/haoyn231/kde-lyricmon.git
+cd kde-lyricmon
 ./install.sh --restart
 ```
 
-`install.sh` 会编译 C++ 插件、把整个包装到 `~/.local/share/plasma/plasmoids/org.hao.lyrics`，然后重启 plasmashell。
+`install.sh` 会编译 C++ 插件、把整个包装到 `~/.local/share/plasma/plasmoids/org.hao.lyricmon`，然后重启 plasmashell。
 
 开发时改用软链接安装，改完 QML 重启 plasmashell 就能看到效果（C++ 改动仍需重新编译）：
 
@@ -85,7 +85,7 @@ cd kde-lyrics
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build -j$(nproc)
 mkdir -p ~/.local/share/plasma/plasmoids
-cp -r package ~/.local/share/plasma/plasmoids/org.hao.lyrics
+cp -r package ~/.local/share/plasma/plasmoids/org.hao.lyricmon
 systemctl --user restart plasma-plasmashell.service
 ```
 
@@ -100,7 +100,7 @@ systemctl --user restart plasma-plasmashell.service
 systemctl --user restart plasma-plasmashell.service
 ```
 
-歌词缓存在 `~/.cache/kde-lyrics/`，卸载不会自动删除。
+歌词缓存在 `~/.cache/kde-lyricmon/`，卸载不会自动删除。
 
 ## 使用
 
@@ -175,7 +175,7 @@ src/           C++ 后端：MPRIS 代理、播放器注册表、歌词引擎、L
 package/       小程序本体：metadata、配置、QML
 ├── contents/ui/            面板与弹窗
 ├── contents/config/        KConfig 定义与配置页
-└── contents/lib/Hao/Lyrics 编译产物落在这里（qmldir + .so）
+└── contents/lib/Hao/LyricMon 编译产物落在这里（qmldir + .so）
 tools/         假播放器、离屏渲染、出图脚本
 tests/         QtTest 单元测试
 ```
@@ -190,9 +190,9 @@ ctest --test-dir build --output-on-failure
 `tools/fakeplayer` 是一个可以被随意摆布的 MPRIS 播放器：位置随真实时间走，能指定曲目、时长、封面、`xesam:asText`，也可以从任意位置起播，用来复现「切歌 / 暂停 / 拖动 / 无歌词」这些不好用真播放器复现的场景：
 
 ```bash
-./build/lyrics-fake-player --title Yellow --artist Coldplay --album Parachutes \
+./build/lyricmon-fake-player --title Yellow --artist Coldplay --album Parachutes \
     --duration 267 --position 100 --cover tools/assets/cover-demo.png
-plasmawindowed org.hao.lyrics
+plasmawindowed org.hao.lyricmon
 ```
 
 ### 为什么有一个 C++ 插件

@@ -22,7 +22,7 @@
 
 namespace {
 
-constexpr auto kUserAgent = "kde-lyrics/0.1.0 (https://github.com/haoyn231/kde-lyrics)";
+constexpr auto kUserAgent = "kde-lyricmon/0.2.0 (https://github.com/haoyn231/kde-lyricmon)";
 constexpr auto kLrclibGet = "https://lrclib.net/api/get";
 constexpr auto kLrclibSearch = "https://lrclib.net/api/search";
 constexpr int kMatchThreshold = 60;
@@ -431,7 +431,7 @@ QString LyricsEngine::findLocalLrc() const
 QString LyricsEngine::cacheFilePath() const
 {
     const QString dir = QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation)
-        + QStringLiteral("/kde-lyrics");
+        + QStringLiteral("/kde-lyricmon");
     const QByteArray hash =
         QCryptographicHash::hash(m_key.toUtf8(), QCryptographicHash::Sha1).toHex();
     return dir + QLatin1Char('/') + QString::fromLatin1(hash) + QStringLiteral(".json");

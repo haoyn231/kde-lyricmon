@@ -1,26 +1,26 @@
 <div align="center">
-  <h1 align="center">kde-lyrics</h1>
+  <h1 align="center">kde-lyricmon</h1>
   <p align="center">KDE Plasma 6 panel lyrics: the current line in your panel, cover art, scrolling lyrics and playback controls in the popup</p>
   <p align="center">English | <a href="README.md">中文</a></p>
 
-  <a href="https://github.com/haoyn231/kde-lyrics/releases/latest"><img src="https://img.shields.io/github/v/release/haoyn231/kde-lyrics?display_name=tag&label=Version&color=blue" alt="Version"></a>
+  <a href="https://github.com/haoyn231/kde-lyricmon/releases/latest"><img src="https://img.shields.io/github/v/release/haoyn231/kde-lyricmon?display_name=tag&label=Version&color=blue" alt="Version"></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-green" alt="MIT License"></a>
   <img src="https://img.shields.io/badge/Plasma-6-1D99F3" alt="KDE Plasma 6">
   <img src="https://img.shields.io/badge/Qt-6.5%2B-41CD52" alt="Qt 6.5+">
   <img src="https://img.shields.io/badge/MPRIS-2.2-orange" alt="MPRIS 2.2">
   <img src="https://img.shields.io/badge/Linux-x86__64-informational" alt="Linux x86_64">
   <br>
-  <a href="https://github.com/haoyn231/kde-lyrics/stargazers"><img src="https://img.shields.io/github/stars/haoyn231/kde-lyrics.svg" alt="GitHub stars"></a>
+  <a href="https://github.com/haoyn231/kde-lyricmon/stargazers"><img src="https://img.shields.io/github/stars/haoyn231/kde-lyricmon.svg" alt="GitHub stars"></a>
 </div>
 
 ---
 
 <p align="center">
-  <img width="58%" src="./docs/images/screenshot.png" alt="kde-lyrics popup (classic layout): cover art, track info, scrolling lyrics, seek bar and controls">
+  <img width="58%" src="./docs/images/screenshot.png" alt="kde-lyricmon popup (classic layout): cover art, track info, scrolling lyrics, seek bar and controls">
 </p>
 
 <p align="center">
-  <img width="76%" src="./docs/images/popup-player.png" alt="kde-lyrics popup (player layout): large cover with the track info on it on the left, lyrics on the right">
+  <img width="76%" src="./docs/images/popup-player.png" alt="kde-lyricmon popup (player layout): large cover with the track info on it on the left, lyrics on the right">
 </p>
 
 <p align="center">
@@ -66,8 +66,8 @@ sudo pacman -S --needed base-devel cmake qt6-base qt6-declarative libplasma kiri
 Build and install for the current user (no root needed):
 
 ```bash
-git clone https://github.com/haoyn231/kde-lyrics.git
-cd kde-lyrics
+git clone https://github.com/haoyn231/kde-lyricmon.git
+cd kde-lyricmon
 ./install.sh --restart
 ```
 
@@ -75,7 +75,7 @@ For development, `./install.sh --symlink` installs a symlink so QML edits only n
 
 Then right-click the panel → **Enter Edit Mode** → **Add Widgets** → search **Desktop Lyrics** → drag it onto the panel.
 
-Uninstall with `./uninstall.sh`. Lyrics cache lives in `~/.cache/kde-lyrics/`.
+Uninstall with `./uninstall.sh`. Lyrics cache lives in `~/.cache/kde-lyricmon/`.
 
 ## Usage
 
@@ -132,7 +132,7 @@ src/           C++ backend: MPRIS proxy, player registry, lyrics engine, LRC par
 package/       the plasmoid: metadata, config, QML
 ├── contents/ui/            panel and popup
 ├── contents/config/        KConfig definition and settings page
-└── contents/lib/Hao/Lyrics build output lands here (qmldir + .so)
+└── contents/lib/Hao/LyricMon build output lands here (qmldir + .so)
 tools/         fake player, offscreen renderer, screenshot script
 tests/         QtTest unit tests
 ```
@@ -145,9 +145,9 @@ ctest --test-dir build --output-on-failure
 `tools/fakeplayer` is a scriptable MPRIS player whose position follows real time — useful for reproducing track changes, pause, seeking and "no lyrics" states deterministically:
 
 ```bash
-./build/lyrics-fake-player --title Yellow --artist Coldplay --album Parachutes \
+./build/lyricmon-fake-player --title Yellow --artist Coldplay --album Parachutes \
     --duration 267 --position 100 --cover tools/assets/cover-demo.png
-plasmawindowed org.hao.lyrics
+plasmawindowed org.hao.lyricmon
 ```
 
 ### Why is there a C++ plugin

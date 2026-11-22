@@ -10,7 +10,7 @@
 
 set -euo pipefail
 
-PLUGIN_ID="org.hao.lyrics"
+PLUGIN_ID="org.hao.lyricmon"
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PKG_DIR="$ROOT/package"
 BUILD_DIR="${BUILD_DIR:-$ROOT/build}"
@@ -51,7 +51,7 @@ if [[ $BUILD -eq 1 ]]; then
     cmake --build "$BUILD_DIR" -j"$(nproc)"
 fi
 
-PLUGIN_SO="$PKG_DIR/contents/lib/Hao/Lyrics/liblyricsplugin.so"
+PLUGIN_SO="$PKG_DIR/contents/lib/Hao/LyricMon/liblyricmonplugin.so"
 if [[ ! -f "$PLUGIN_SO" ]]; then
     echo "缺少 $PLUGIN_SO：先不带 --no-build 跑一次。" >&2
     exit 1
@@ -89,7 +89,7 @@ cat <<EOF
   2. 搜索「桌面歌词」把它拖到面板上
 
 调试：plasmawindowed $PLUGIN_ID
-歌词缓存：${XDG_CACHE_HOME:-$HOME/.cache}/kde-lyrics/
+歌词缓存：${XDG_CACHE_HOME:-$HOME/.cache}/kde-lyricmon/
 EOF
 
 if [[ $RESTART -eq 1 ]]; then

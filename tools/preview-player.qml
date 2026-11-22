@@ -9,7 +9,7 @@
 
 import QtQuick
 import org.kde.kirigami as Kirigami
-import "../package/contents/lib/Hao/Lyrics"
+import "../package/contents/lib/Hao/LyricMon"
 import "../package/contents/ui"
 
 Rectangle {

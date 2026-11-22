@@ -10,12 +10,12 @@
         "Description": "在面板上实时显示当前播放歌曲的歌词，点开后查看封面、滚动歌词与播放控制",
         "Description[en_GB]": "Live lyrics of the current MPRIS track in the panel, with cover art, scrolling lyrics and playback controls in the popup",
         "Icon": "media-optical-audio",
-        "Id": "org.hao.lyrics",
+        "Id": "org.hao.lyricmon",
         "License": "MIT",
         "Name": "桌面歌词",
         "Name[en_GB]": "Desktop Lyrics",
         "Version": "0.2.0",
-        "Website": "https://github.com/haoyn231/kde-lyrics"
+        "Website": "https://github.com/haoyn231/kde-lyricmon"
     },
     "X-Plasma-API-Minimum-Version": "6.0",
     "X-Plasma-MainScript": "ui/main.qml"

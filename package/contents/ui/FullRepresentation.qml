@@ -12,7 +12,7 @@ import QtQuick
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
 import org.kde.plasma.extras as PlasmaExtras
-import "../lib/Hao/Lyrics"
+import "../lib/Hao/LyricMon"
 
 PlasmaExtras.Representation {
     id: page

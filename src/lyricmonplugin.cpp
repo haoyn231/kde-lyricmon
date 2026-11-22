@@ -14,7 +14,7 @@
 #include <QQmlEngine>
 #include <QQmlExtensionPlugin>
 
-class LyricsPlugin : public QQmlExtensionPlugin
+class LyricMonPlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)
@@ -33,4 +33,4 @@ public:
     }
 };
 
-#include "lyricsplugin.moc"
+#include "lyricmonplugin.moc"

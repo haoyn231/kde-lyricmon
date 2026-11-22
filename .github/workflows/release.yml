@@ -32,7 +32,7 @@ jobs:
             echo "::error::package/metadata.json Version does not match tag ${GITHUB_REF_NAME}"
             exit 1
           fi
-          cmake_version="$(grep -oE 'project\(kde-lyrics VERSION [0-9]+\.[0-9]+\.[0-9]+' CMakeLists.txt \
+          cmake_version="$(grep -oE 'project\(kde-lyricmon VERSION [0-9]+\.[0-9]+\.[0-9]+' CMakeLists.txt \
             | grep -oE '[0-9]+\.[0-9]+\.[0-9]+$')"
           if [ "${cmake_version}" != "${version}" ]; then
             echo "::error::CMakeLists.txt project version ${cmake_version} does not match tag ${GITHUB_REF_NAME}"
@@ -53,9 +53,9 @@ jobs:
       - name: Package installable plasmoid
         run: |
           set -euo pipefail
-          asset="kde-lyrics-${GITHUB_REF_NAME}.tar.gz"
+          asset="kde-lyricmon-${GITHUB_REF_NAME}.tar.gz"
           # 发布包必须带上编译好的 QML 插件，否则装上去就是个空壳
-          test -f package/contents/lib/Hao/Lyrics/liblyricsplugin.so
+          test -f package/contents/lib/Hao/LyricMon/liblyricmonplugin.so
           tar -czf "${asset}" -C package .
           sha256sum "${asset}" > "${asset}.sha256"
 
@@ -64,12 +64,12 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          asset="kde-lyrics-${GITHUB_REF_NAME}.tar.gz"
+          asset="kde-lyricmon-${GITHUB_REF_NAME}.tar.gz"
           notes="docs/releases/${GITHUB_REF_NAME}.md"
           if [ ! -f "${notes}" ]; then
             notes="docs/releases/TEMPLATE.md"
           fi
           gh release create "${GITHUB_REF_NAME}" \
             "${asset}" "${asset}.sha256" \
-            --title "kde-lyrics ${GITHUB_REF_NAME}" \
+            --title "kde-lyricmon ${GITHUB_REF_NAME}" \
             --notes-file "${notes}"

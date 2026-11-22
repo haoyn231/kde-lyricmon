@@ -6,7 +6,7 @@
 
 set -euo pipefail
 
-PLUGIN_ID="org.hao.lyrics"
+PLUGIN_ID="org.hao.lyricmon"
 TARGET_ROOT="${XDG_DATA_HOME:-$HOME/.local/share}/plasma/plasmoids"
 TARGET_DIR="$TARGET_ROOT/$PLUGIN_ID"
 
@@ -20,4 +20,4 @@ if command -v kpackagetool6 >/dev/null 2>&1; then
 fi
 rm -rf "$TARGET_DIR"
 echo "已删除：$TARGET_DIR"
-echo "歌词缓存仍在 ${XDG_CACHE_HOME:-$HOME/.cache}/kde-lyrics/，需要的话手动删除。"
+echo "歌词缓存仍在 ${XDG_CACHE_HOME:-$HOME/.cache}/kde-lyricmon/，需要的话手动删除。"

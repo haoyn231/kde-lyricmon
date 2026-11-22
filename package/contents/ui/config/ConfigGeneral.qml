@@ -5,7 +5,7 @@ import QtQuick
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
 import org.kde.plasma.components as PlasmaComponents3
-import "../../lib/Hao/Lyrics"
+import "../../lib/Hao/LyricMon"
 
 Kirigami.FormLayout {
     id: page

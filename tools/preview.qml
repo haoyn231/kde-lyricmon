@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 haoyn231
 // SPDX-License-Identifier: MIT
 //
-// 开发工具：离屏渲染经典弹窗（由 lyrics-preview 加载）。
+// 开发工具：离屏渲染经典弹窗（由 lyricmon-preview 加载）。
 //
 // plasmashell 之外没有「弹窗」这一层，Theme 也拿不到 Plasma 配色（全是黑），
 // 所以这里自己铺一张模拟弹窗底 + 一套 Breeze Dark 配色，纯粹为了出图。
@@ -9,7 +9,7 @@
 
 import QtQuick
 import org.kde.kirigami as Kirigami
-import "../package/contents/lib/Hao/Lyrics"
+import "../package/contents/lib/Hao/LyricMon"
 import "../package/contents/ui"
 
 Rectangle {
