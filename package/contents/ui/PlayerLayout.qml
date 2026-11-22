@@ -130,8 +130,7 @@ RowLayout {
 
             ControlButton {
                 primary: true
-                icon: player.activePlayer !== null && player.activePlayer.playing
-                      ? "media-playback-pause-symbolic" : "media-playback-start-symbolic"
+                symbol: player.activePlayer !== null && player.activePlayer.playing ? "pause" : "play"
                 actionEnabled: player.activePlayer !== null && player.activePlayer.canControl
                 onClicked: player.activePlayer.playPause()
             }

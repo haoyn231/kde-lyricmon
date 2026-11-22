@@ -89,13 +89,21 @@ Item {
             required property int index
 
             readonly property bool current: index === root.currentIndex
+            // 视口上下边缘各做一段淡出：滚动时最上面/最下面那半行会贴着边被
+            // 硬切，用透明度在边缘收敛掉，比切一刀好看得多，也不依赖 mask。
+            readonly property real fadeRange: Math.round(Kirigami.Units.gridUnit * 1.1)
+            readonly property real viewTop: line.y - view.contentY
+            readonly property real viewBottom: viewTop + line.height
+            readonly property real edgeFactor: Math.max(0, Math.min(1,
+                Math.min(viewTop, view.height - viewBottom) / line.fadeRange))
 
             width: view.width
             text: modelData.text
             horizontalAlignment: Text.AlignHCenter
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             color: current ? root.accentColor : root.textColor
-            opacity: current ? 1 : Math.max(0.26, 0.6 - Math.abs(index - root.currentIndex) * 0.07)
+            opacity: (current ? 1 : Math.max(0.26, 0.6 - Math.abs(index - root.currentIndex) * 0.07))
+                     * (0.1 + 0.9 * line.edgeFactor)
             font.pixelSize: Math.round(Kirigami.Units.gridUnit * (current ? 0.98 : 0.84))
             font.weight: current ? Font.DemiBold : Font.Normal
             topPadding: Math.round(Kirigami.Units.smallSpacing * 0.5)

@@ -16,7 +16,7 @@
 ---
 
 <p align="center">
-  <img width="58%" src="./docs/images/screenshot.png" alt="kde-lyricmon 弹窗（经典布局）：封面、曲目信息、滚动歌词、进度条与播放控制">
+  <img width="56%" src="./docs/images/screenshot.png" alt="kde-lyricmon 弹窗（经典布局）：封面、曲目信息、滚动歌词、进度条与播放控制">
 </p>
 
 <p align="center">
@@ -158,9 +158,10 @@ systemctl --user restart plasma-plasmashell.service
 - 卡片、徽标、分隔线：由 `textColor` 派生极低透明度
 - 主按钮的图标颜色按强调色亮度自动选深/浅，强调色换成亮黄也看得清
 
-四张图全部由 `./tools/render-preview.sh` 离屏渲染，用的是同一套深色配色：`plasmashell` 之外没有「弹窗」这一层，所以脚本自己铺了一张模拟弹窗底 —— 只有底是画的，里面的界面、数据、排版都是真的。
+文档里的图都是浅色配色、2 倍离屏渲染：`plasmashell` 之外没有「弹窗」这一层，所以预览器自己铺一张模拟弹窗底 —— 只有那层底是画的，界面、数据和排版都是真的。
 
-想自己出图：
+- 顶部主图（`screenshot.png`）是「弹窗 + 模糊壁纸 + 圆角投影」合成的，源图用 `--light --square` 渲染后交给合成脚本；
+- 其余三张由 `./tools/render-preview.sh` 直接生成。
 
 ```bash
 cmake --build build -j$(nproc)

@@ -156,8 +156,7 @@ PlasmaExtras.Representation {
 
                 ControlButton {
                     primary: true
-                    icon: page.player !== null && page.player.playing
-                          ? "media-playback-pause-symbolic" : "media-playback-start-symbolic"
+                    symbol: page.player !== null && page.player.playing ? "pause" : "play"
                     actionEnabled: page.player !== null && page.player.canControl
                     onClicked: page.player.playPause()
                 }

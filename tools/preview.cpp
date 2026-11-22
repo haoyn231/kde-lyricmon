@@ -42,12 +42,14 @@ int main(int argc, char *argv[])
                                      QStringLiteral("ms"), QStringLiteral("2000"));
     const QCommandLineOption twoLinesOpt(QStringLiteral("two-lines"),
                                          QStringLiteral("Set previewTwoLines=true"));
-    const QCommandLineOption scaleOpt(QStringLiteral("scale"),
-                                      QStringLiteral("Device pixel ratio"),
-                                      QStringLiteral("factor"), QStringLiteral("1"));
     const QCommandLineOption darkOpt(QStringLiteral("dark"),
                                      QStringLiteral("Use a dark panel background (compact preview)"));
-    parser.addOptions({outOpt, widthOpt, heightOpt, waitOpt, twoLinesOpt, scaleOpt, darkOpt});
+    const QCommandLineOption lightOpt(QStringLiteral("light"),
+                                      QStringLiteral("Use the light mock-popup palette"));
+    const QCommandLineOption squareOpt(QStringLiteral("square"),
+                                       QStringLiteral("Square corners (for hero compositing)"));
+    parser.addOptions({outOpt, widthOpt, heightOpt, waitOpt, twoLinesOpt, darkOpt, lightOpt,
+                       squareOpt});
     parser.process(app);
 
     const QStringList files = parser.positionalArguments();
@@ -83,6 +85,11 @@ int main(int argc, char *argv[])
                                            parser.isSet(twoLinesOpt));
     view.rootContext()->setContextProperty(QStringLiteral("previewDark"),
                                            parser.isSet(darkOpt));
+    view.rootContext()->setContextProperty(QStringLiteral("previewLight"),
+                                           parser.isSet(lightOpt));
+    // 合成主图时圆角与投影由合成脚本负责，源图必须是方的、完全不透明
+    view.rootContext()->setContextProperty(QStringLiteral("previewSquare"),
+                                           parser.isSet(squareOpt));
 
     view.setSource(QUrl::fromLocalFile(qmlFile));
     if (view.status() != QQuickView::Ready) {

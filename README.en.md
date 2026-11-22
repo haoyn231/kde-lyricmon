@@ -16,7 +16,7 @@
 ---
 
 <p align="center">
-  <img width="58%" src="./docs/images/screenshot.png" alt="kde-lyricmon popup (classic layout): cover art, track info, scrolling lyrics, seek bar and controls">
+  <img width="56%" src="./docs/images/screenshot.png" alt="kde-lyricmon popup (classic layout): cover art, track info, scrolling lyrics, seek bar and controls">
 </p>
 
 <p align="center">
@@ -123,7 +123,9 @@ Requests time out after 8 s; on failure the plain text stays and only a real abs
 
 No colours are hardcoded: text uses `Kirigami.Theme.textColor`, accents use `Kirigami.Theme.highlightColor`, cards and badges are low-opacity derivatives of the text colour, and the primary button picks a light or dark glyph based on the accent's luminance.
 
-All four screenshots are offscreen renders produced by `./tools/render-preview.sh` with the same dark palette. Outside plasmashell there is no popup surface, so the script paints the popup background itself — only that background is synthetic; the widget, the data and the layout are real.
+All screenshots are light-theme 2x offscreen renders. Outside plasmashell there is no popup surface, so the previewer paints the popup background itself — only that background is synthetic; the widget, the data and the layout are real.
+
+The hero image at the top is that render composited onto a blurred wallpaper with rounded corners and a drop shadow; the other three come straight from `./tools/render-preview.sh`.
 
 ## Development and testing
 
