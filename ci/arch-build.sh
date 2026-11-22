@@ -26,8 +26,10 @@ python3 -c "import json,sys; json.load(open('package/metadata.json')); print('me
 # 冒烟渲染：容器里没有会话总线，所以走"没有播放器"的待机态 —— 只要布局能加载、
 # 能出图、且没有 QML 运行时错误，就说明这套 QML 不是坏的。
 export QT_QPA_PLATFORM=offscreen
+# 容器里没有 GPU：软件渲染后端才能在离屏平台创建场景
+export QT_QUICK_BACKEND=software
 ./build/lyricmon-preview tools/preview.qml -o /tmp/lyricmon-popup.png \
-    --width 380 --height 430 --wait 1200 > /tmp/lyricmon-preview.log 2>&1 || {
+    --width 380 --height 430 --wait 2500 > /tmp/lyricmon-preview.log 2>&1 || {
     cat /tmp/lyricmon-preview.log
     exit 1
 }

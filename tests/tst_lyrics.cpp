@@ -210,5 +210,5 @@ void LyricsTest::scoreRewardsSyncedLyrics()
     QVERIFY(syncedScore > plainScore);
 }
 
-QTEST_MAIN(LyricsTest)
+QTEST_GUILESS_MAIN(LyricsTest)
 #include "tst_lyrics.moc"

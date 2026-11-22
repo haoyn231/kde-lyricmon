@@ -29,7 +29,9 @@ add_library(lyricmoncore STATIC
 )
 set_target_properties(lyricmoncore PROPERTIES POSITION_INDEPENDENT_CODE ON)
 target_include_directories(lyricmoncore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
-target_link_libraries(lyricmoncore PUBLIC Qt6::Core Qt6::Gui Qt6::DBus Qt6::Network)
+# 后端只用 Core/DBus/Network：不链 Gui，测试才能用 QTEST_GUILESS_MAIN，
+# 在没有显示环境（CI 容器）里也不会因为找不到平台插件而 abort
+target_link_libraries(lyricmoncore PUBLIC Qt6::Core Qt6::DBus Qt6::Network)
 
 add_library(lyricmonplugin MODULE src/lyricmonplugin.cpp)
 target_link_libraries(lyricmonplugin PRIVATE lyricmoncore Qt6::Qml)
