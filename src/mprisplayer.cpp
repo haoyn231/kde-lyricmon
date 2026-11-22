@@ -248,9 +248,11 @@ void MprisPlayer::applyPlayerProperties(const QVariantMap &props)
         Q_EMIT trackChanged();
     }
     if (statusDirty) {
-        m_ticker->setInterval(250);
         if (playing()) {
             m_ticker->start();
+        } else {
+            // 暂停/停止时没有必要每 250ms 醒一次
+            m_ticker->stop();
         }
         Q_EMIT playbackStatusChanged();
     }

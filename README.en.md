@@ -42,7 +42,7 @@ All track information comes from [MPRIS 2.2](https://specifications.freedesktop.
 - A source badge tells you whether the lyrics came from the player, a local file or LRCLIB
 - Multiple players: playing > paused > has a track; players with album metadata win, and a browser tab starting playback no longer steals the panel
 - Pin a specific player in the settings (matched by base service name, so it survives player restarts)
-- Lyrics and cover art are cached on disk; switching songs back and forth does not hit the network again
+- Lyrics are cached on disk; switching songs back and forth does not hit the network again
 - All lookups, network requests and image loads are asynchronous
 
 ## Install (KDE Plasma 6)
