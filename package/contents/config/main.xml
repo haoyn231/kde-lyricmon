@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+  <kcfgfile name=""/>
+
+  <group name="General">
+    <!-- 面板上显示一行还是两行歌词（两行时第二行是下一句，淡化显示） -->
+    <entry name="twoLines" type="Bool">
+      <default>false</default>
+    </entry>
+    <!-- 面板上显示的音符图标 -->
+    <entry name="showIcon" type="Bool">
+      <default>true</default>
+    </entry>
+    <!-- 面板项的最大宽度，单位是 gridUnit；过长时跑马灯滚动 -->
+    <entry name="maxWidthUnits" type="Int">
+      <default>18</default>
+    </entry>
+    <!-- 没有歌曲在放时是否完全收起（只留一个图标） -->
+    <entry name="hideWhenIdle" type="Bool">
+      <default>true</default>
+    </entry>
+    <!-- 面板字号：0 = 跟随系统，否则是 pt -->
+    <entry name="compactFontSize" type="Int">
+      <default>0</default>
+    </entry>
+    <!-- 播放器提供的 xesam:asText 是否作为歌词来源 -->
+    <entry name="usePlayerLyrics" type="Bool">
+      <default>true</default>
+    </entry>
+    <!-- 本地 .lrc 文件 -->
+    <entry name="useLocalLyrics" type="Bool">
+      <default>true</default>
+    </entry>
+    <!-- LRCLIB 在线歌词 -->
+    <entry name="useOnlineLyrics" type="Bool">
+      <default>true</default>
+    </entry>
+    <!-- 额外的本地歌词目录（空 = 只用默认目录） -->
+    <entry name="extraLyricsDir" type="String">
+      <default></default>
+    </entry>
+    <!-- 固定使用某个播放器；空字符串表示自动跟随正在播放的那个 -->
+    <entry name="preferredPlayer" type="String">
+      <default></default>
+    </entry>
+    <!-- 弹窗里的播放控制（上一首 / 播放暂停 / 下一首） -->
+    <entry name="showControls" type="Bool">
+      <default>true</default>
+    </entry>
+  </group>
+</kcfg>

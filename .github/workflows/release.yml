@@ -1,0 +1,75 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build and publish ${{ github.ref_name }}
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Validate tag against metadata and CMake
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME#v}"
+          # 「关于」对话框读 package/metadata.json 的 Version，发布包名来自 tag，
+          # 三个地方必须一致，否则发出去的包版本号会打架。
+          if ! grep -q "\"Version\": \"${version}\"" package/metadata.json; then
+            echo "::error::package/metadata.json Version does not match tag ${GITHUB_REF_NAME}"
+            exit 1
+          fi
+          cmake_version="$(grep -oE 'project\(kde-lyrics VERSION [0-9]+\.[0-9]+\.[0-9]+' CMakeLists.txt \
+            | grep -oE '[0-9]+\.[0-9]+\.[0-9]+$')"
+          if [ "${cmake_version}" != "${version}" ]; then
+            echo "::error::CMakeLists.txt project version ${cmake_version} does not match tag ${GITHUB_REF_NAME}"
+            exit 1
+          fi
+          if [ ! -f "docs/releases/${GITHUB_REF_NAME}.md" ]; then
+            echo "::warning::docs/releases/${GITHUB_REF_NAME}.md is missing, the generic template will be used"
+          fi
+
+      - name: Build and test in Arch Linux
+        run: |
+          docker run --rm \
+            -v "$GITHUB_WORKSPACE:/src" \
+            -w /src \
+            archlinux:latest \
+            bash ci/arch-build.sh
+
+      - name: Package installable plasmoid
+        run: |
+          set -euo pipefail
+          asset="kde-lyrics-${GITHUB_REF_NAME}.tar.gz"
+          # 发布包必须带上编译好的 QML 插件，否则装上去就是个空壳
+          test -f package/contents/lib/Hao/Lyrics/liblyricsplugin.so
+          tar -czf "${asset}" -C package .
+          sha256sum "${asset}" > "${asset}.sha256"
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          asset="kde-lyrics-${GITHUB_REF_NAME}.tar.gz"
+          notes="docs/releases/${GITHUB_REF_NAME}.md"
+          if [ ! -f "${notes}" ]; then
+            notes="docs/releases/TEMPLATE.md"
+          fi
+          gh release create "${GITHUB_REF_NAME}" \
+            "${asset}" "${asset}.sha256" \
+            --title "kde-lyrics ${GITHUB_REF_NAME}" \
+            --notes-file "${notes}"

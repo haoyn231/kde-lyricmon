@@ -1,0 +1,6 @@
+build/
+dist/
+*.user
+*.tar.gz
+*.sha256
+.workbuddy/
