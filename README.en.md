@@ -16,20 +16,12 @@
 ---
 
 <p align="center">
-  <img width="56%" src="./docs/images/screenshot.png" alt="kde-lyricmon popup (classic layout): cover art, track info, scrolling lyrics, seek bar and controls">
+  <img width="37%" src="./docs/images/screenshot.png" alt="kde-lyricmon popup (classic layout): cover art, track info, scrolling lyrics, seek bar and controls">
+  &nbsp;
+  <img width="59%" src="./docs/images/screenshot-player.png" alt="kde-lyricmon popup (player layout): large cover with the track info on it on the left, lyrics on the right">
 </p>
 
-<p align="center">
-  <img width="76%" src="./docs/images/popup-player.png" alt="kde-lyricmon popup (player layout): large cover with the track info on it on the left, lyrics on the right">
-</p>
-
-<p align="center">
-  <img src="./docs/images/panel.png" alt="Single-line lyrics in the panel">
-  &nbsp;&nbsp;
-  <img src="./docs/images/panel-two-lines.png" alt="Two-line lyrics in the panel">
-</p>
-
-<p align="center"><sub>One line in the panel (optionally two); the popup comes in a classic and a player layout, switchable in the settings</sub></p>
+<p align="center"><sub>Two popup layouts: classic (left) and player (right), switchable in the settings; both show the track that was actually playing.</sub></p>
 
 A KDE Plasma 6 plasmoid that shows the lyrics of whatever is playing, in the panel, with the current line highlighted. Click it for cover art, scrolling lyrics and playback controls.
 
@@ -123,9 +115,9 @@ Requests time out after 8 s; on failure the plain text stays and only a real abs
 
 No colours are hardcoded: text uses `Kirigami.Theme.textColor`, accents use `Kirigami.Theme.highlightColor`, cards and badges are low-opacity derivatives of the text colour, and the primary button picks a light or dark glyph based on the accent's luminance.
 
-All screenshots are light-theme 2x offscreen renders. Outside plasmashell there is no popup surface, so the previewer paints the popup background itself — only that background is synthetic; the widget, the data and the layout are real.
+Both hero images are light-theme 2x offscreen renders of the track that was actually playing — cover art, lyrics and playback position included, no fake player. Outside plasmashell there is no popup surface, so the previewer paints the popup background itself; that background is the only synthetic part.
 
-The hero image at the top is that render composited onto a blurred wallpaper with rounded corners and a drop shadow; the other three come straight from `./tools/render-preview.sh`.
+`screenshot.png` is the classic portrait layout, `screenshot-player.png` the wide player layout (large cover on the left, lyrics on the right). Each is a `--light --square` render composited onto a blurred wallpaper with rounded corners and a drop shadow by `tools/compose_hero.py`. The player layout needs the wide render size or long lyric lines get clipped. Re-render both with `./tools/render-preview.sh` (it picks the currently playing music player, or set `PLAYER=...`).
 
 ## Development and testing
 
@@ -135,7 +127,7 @@ package/       the plasmoid: metadata, config, QML
 ├── contents/ui/            panel and popup
 ├── contents/config/        KConfig definition and settings page
 └── contents/lib/Hao/LyricMon build output lands here (qmldir + .so)
-tools/         fake player, offscreen renderer, screenshot script
+tools/         fake player, offscreen renderer, hero composer and screenshot script
 tests/         QtTest unit tests
 ```
 

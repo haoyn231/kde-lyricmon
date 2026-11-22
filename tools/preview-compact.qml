@@ -30,11 +30,11 @@ Item {
         value: Mpris.active
     }
 
-    // 出图要可重复：如果假播放器在总线上就固定用它，没有则自动回退
+    // --player 指定真实播放器时锁定它；留空则自动选主
     Binding {
         target: Mpris
         property: "preferredService"
-        value: "org.mpris.MediaPlayer2.fakeplayer"
+        value: typeof previewPlayer !== "undefined" ? previewPlayer : ""
     }
 
     // 面板底色，方便看清文字在面板上的观感

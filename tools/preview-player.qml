@@ -37,11 +37,12 @@ Rectangle {
         value: Mpris.active
     }
 
-    // 出图要可重复：如果假播放器在总线上就固定用它，没有则自动回退
+    // --player 指定真实播放器时锁定它（README 主图用正在播放的音乐）；
+    // 留空则按插件规则自动选主，私有会话里只有假播放器时出图依旧可复现
     Binding {
         target: Mpris
         property: "preferredService"
-        value: "org.mpris.MediaPlayer2.fakeplayer"
+        value: typeof previewPlayer !== "undefined" ? previewPlayer : ""
     }
 
     FullRepresentation {

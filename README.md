@@ -16,20 +16,12 @@
 ---
 
 <p align="center">
-  <img width="56%" src="./docs/images/screenshot.png" alt="kde-lyricmon 弹窗（经典布局）：封面、曲目信息、滚动歌词、进度条与播放控制">
+  <img width="37%" src="./docs/images/screenshot.png" alt="kde-lyricmon 弹窗（经典布局）：封面、曲目信息、滚动歌词、进度条与播放控制">
+  &nbsp;
+  <img width="59%" src="./docs/images/screenshot-player.png" alt="kde-lyricmon 弹窗（播放器布局）：大封面压在左侧并带元信息，右侧是滚动歌词">
 </p>
 
-<p align="center">
-  <img width="76%" src="./docs/images/popup-player.png" alt="kde-lyricmon 弹窗（播放器布局）：大封面压在左侧并带元信息，右侧是滚动歌词">
-</p>
-
-<p align="center">
-  <img src="./docs/images/panel.png" alt="面板上的单行歌词">
-  &nbsp;&nbsp;
-  <img src="./docs/images/panel-two-lines.png" alt="面板上的双行歌词">
-</p>
-
-<p align="center"><sub>面板上只占一句话的位置（可选两行）；弹窗有「经典」和「播放器」两种布局，设置里切换</sub></p>
+<p align="center"><sub>弹窗两种布局：经典（左）与播放器（右），设置里切换；两张图都取自当时正在播放的真实曲目</sub></p>
 
 KDE Plasma 6 面板小程序（Plasmoid）：在菜单栏实时显示正在播放的歌词，点开后查看封面、滚动歌词与播放控制。
 
@@ -158,15 +150,17 @@ systemctl --user restart plasma-plasmashell.service
 - 卡片、徽标、分隔线：由 `textColor` 派生极低透明度
 - 主按钮的图标颜色按强调色亮度自动选深/浅，强调色换成亮黄也看得清
 
-文档里的图都是浅色配色、2 倍离屏渲染：`plasmashell` 之外没有「弹窗」这一层，所以预览器自己铺一张模拟弹窗底 —— 只有那层底是画的，界面、数据和排版都是真的。
+文档里的两张主图都是浅色主题、2 倍离屏渲染，取自当时**正在播放的真实曲目**（封面、歌词、进度都是真的，不是假播放器）：`plasmashell` 之外没有「弹窗」这一层，所以预览器自己铺一张模拟弹窗底 —— 只有那层底是画的，界面、数据和排版都是真的。
 
-- 顶部主图（`screenshot.png`）是「弹窗 + 模糊壁纸 + 圆角投影」合成的，源图用 `--light --square` 渲染后交给合成脚本；
-- 其余三张由 `./tools/render-preview.sh` 直接生成。
+- `screenshot.png`：经典布局，竖版弹窗；
+- `screenshot-player.png`：播放器布局，宽版弹窗（大封面在左、歌词在右）。
+
+两张都是「弹窗 + 模糊壁纸 + 圆角投影」合成出来的：源图用 `--light --square` 渲染，再交给 `tools/compose_hero.py`。播放器布局必须按宽尺寸渲染，否则右侧的长歌词会被挤掉。
 
 ```bash
 cmake --build build -j$(nproc)
-./tools/render-preview.sh          # 2 倍图，直接覆盖 docs/images/
-SCALE=1 ./tools/render-preview.sh  # 1 倍图，快速看布局
+./tools/render-preview.sh          # 自动挑正在播放的音乐，重出两张主图
+PLAYER=org.mpris.MediaPlayer2.vlc ./tools/render-preview.sh   # 或指定某个播放器
 ```
 
 ## 开发与测试
@@ -177,7 +171,7 @@ package/       小程序本体：metadata、配置、QML
 ├── contents/ui/            面板与弹窗
 ├── contents/config/        KConfig 定义与配置页
 └── contents/lib/Hao/LyricMon 编译产物落在这里（qmldir + .so）
-tools/         假播放器、离屏渲染、出图脚本
+tools/         假播放器、离屏渲染、主图合成与出图脚本
 tests/         QtTest 单元测试
 ```
 

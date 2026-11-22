@@ -48,8 +48,11 @@ int main(int argc, char *argv[])
                                       QStringLiteral("Use the light mock-popup palette"));
     const QCommandLineOption squareOpt(QStringLiteral("square"),
                                        QStringLiteral("Square corners (for hero compositing)"));
+    const QCommandLineOption playerOpt(QStringLiteral("player"),
+                                        QStringLiteral("Lock to this MPRIS service (real player; empty = auto)"),
+                                        QStringLiteral("service"));
     parser.addOptions({outOpt, widthOpt, heightOpt, waitOpt, twoLinesOpt, darkOpt, lightOpt,
-                       squareOpt});
+                       squareOpt, playerOpt});
     parser.process(app);
 
     const QStringList files = parser.positionalArguments();
@@ -90,6 +93,10 @@ int main(int argc, char *argv[])
     // 合成主图时圆角与投影由合成脚本负责，源图必须是方的、完全不透明
     view.rootContext()->setContextProperty(QStringLiteral("previewSquare"),
                                            parser.isSet(squareOpt));
+    // 传了服务名就锁定真实播放器（出图用正在播放的音乐）；留空时按插件自己的
+    // 规则选主 —— 私有 D-Bus 会话里只有假播放器，脚本出图依旧可复现
+    view.rootContext()->setContextProperty(QStringLiteral("previewPlayer"),
+                                           parser.value(playerOpt));
 
     view.setSource(QUrl::fromLocalFile(qmlFile));
     if (view.status() != QQuickView::Ready) {
