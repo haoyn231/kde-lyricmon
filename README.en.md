@@ -16,7 +16,11 @@
 ---
 
 <p align="center">
-  <img width="62%" src="./docs/images/screenshot.png" alt="kde-lyrics popup: cover art, track info, scrolling lyrics, seek bar and controls">
+  <img width="58%" src="./docs/images/screenshot.png" alt="kde-lyrics popup (classic layout): cover art, track info, scrolling lyrics, seek bar and controls">
+</p>
+
+<p align="center">
+  <img width="76%" src="./docs/images/popup-player.png" alt="kde-lyrics popup (player layout): large cover with the track info on it on the left, lyrics on the right">
 </p>
 
 <p align="center">
@@ -25,7 +29,7 @@
   <img src="./docs/images/panel-two-lines.png" alt="Two-line lyrics in the panel">
 </p>
 
-<p align="center"><sub>One line in the panel (optionally two); clicking opens cover art, the lyrics around the current line, a seek bar and previous/play/next</sub></p>
+<p align="center"><sub>One line in the panel (optionally two); the popup comes in a classic and a player layout, switchable in the settings</sub></p>
 
 A KDE Plasma 6 plasmoid that shows the lyrics of whatever is playing, in the panel, with the current line highlighted. Click it for cover art, scrolling lyrics and playback controls.
 
@@ -34,8 +38,12 @@ All track information comes from [MPRIS 2.2](https://specifications.freedesktop.
 ## Features
 
 - Panel: the current lyric line, optionally a second line for the next one; long lines scroll like a ticker
+- The little music icon in front of the panel text can be turned off
 - Falls back to the track title when there are no synced lyrics; collapses (icon only, or nothing) when nothing is playing
 - Popup: cover art, title / artist / album, surrounding lyrics, seek bar, previous / play-pause / next
+- Two popup layouts, switchable in the settings:
+  - **Classic**: info on top, lyrics in the middle, seek bar and controls at the bottom
+  - **Player**: a large cover on the left with the title / artist / album over it, seek bar and controls underneath, lyrics on the right
 - Lyrics are centred and scrolled automatically; the current line is bold in the accent colour, distant lines fade out
 - Click any lyric line to jump there (via MPRIS `SetPosition`, not simulated key presses)
 - Dragging the seek bar only updates the display; the jump happens on release
@@ -74,7 +82,7 @@ Uninstall with `./uninstall.sh`. Lyrics cache lives in `~/.cache/kde-lyrics/`.
 - The line in the panel is the current lyric.
 - Click to expand the popup, click again to close.
 - Click a lyric line or drag the seek bar to jump.
-- Right-click the widget → **Configure** for panel layout, lyrics sources, extra lyrics directory, controls and the preferred player.
+- Right-click the widget → **Configure** for the panel layout, the popup layout (classic / player), lyrics sources, extra lyrics directory, controls and the preferred player.
 
 ### Local lyrics
 
@@ -115,7 +123,7 @@ Requests time out after 8 s; on failure the plain text stays and only a real abs
 
 No colours are hardcoded: text uses `Kirigami.Theme.textColor`, accents use `Kirigami.Theme.highlightColor`, cards and badges are low-opacity derivatives of the text colour, and the primary button picks a light or dark glyph based on the accent's luminance.
 
-`docs/images/screenshot.png` was captured from a real plasmashell session on the Orchis-dark theme; the panel images are offscreen renders using the same dark palette.
+All four screenshots are offscreen renders produced by `./tools/render-preview.sh` with the same dark palette. Outside plasmashell there is no popup surface, so the script paints the popup background itself — only that background is synthetic; the widget, the data and the layout are real.
 
 ## Development and testing
 

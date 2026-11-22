@@ -130,5 +130,6 @@ PlasmoidItem {
 
     fullRepresentation: FullRepresentation {
         showControls: plasmoid.configuration.showControls
+        layoutMode: plasmoid.configuration.popupLayout
     }
 }

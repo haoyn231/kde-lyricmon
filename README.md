@@ -16,7 +16,11 @@
 ---
 
 <p align="center">
-  <img width="62%" src="./docs/images/screenshot.png" alt="kde-lyrics 弹窗：封面、曲目信息、滚动歌词、进度条与播放控制">
+  <img width="58%" src="./docs/images/screenshot.png" alt="kde-lyrics 弹窗（经典布局）：封面、曲目信息、滚动歌词、进度条与播放控制">
+</p>
+
+<p align="center">
+  <img width="76%" src="./docs/images/popup-player.png" alt="kde-lyrics 弹窗（播放器布局）：大封面压在左侧并带元信息，右侧是滚动歌词">
 </p>
 
 <p align="center">
@@ -25,7 +29,7 @@
   <img src="./docs/images/panel-two-lines.png" alt="面板上的双行歌词">
 </p>
 
-<p align="center"><sub>面板上只占一句话的位置（可选两行）；点开后是封面、当前歌词上下文、进度与上一首/播放/下一首</sub></p>
+<p align="center"><sub>面板上只占一句话的位置（可选两行）；弹窗有「经典」和「播放器」两种布局，设置里切换</sub></p>
 
 KDE Plasma 6 面板小程序（Plasmoid）：在菜单栏实时显示正在播放的歌词，点开后查看封面、滚动歌词与播放控制。
 
@@ -34,8 +38,12 @@ KDE Plasma 6 面板小程序（Plasmoid）：在菜单栏实时显示正在播�
 ## 功能
 
 - 面板常驻：显示当前这一句歌词，可选第二行显示下一句；放不下时自动跑马灯滚动
+- 面板前面的音符图标可以关掉，只留纯歌词
 - 没有同步歌词时回退到歌名，没有音乐时按配置收起（只留音符图标或完全隐藏）
 - 点击展开：封面、歌名 / 艺术家 / 专辑、上下文若干句歌词、进度条、上一首 / 播放暂停 / 下一首
+- 弹窗两种布局，设置里选：
+  - **经典**：信息在上、歌词在中、进度与控制在下
+  - **播放器**：封面放大到左侧，歌名 / 艺术家 / 专辑压在封面底部，进度与控制排在封面下方，右侧是滚动歌词
 - 歌词居中滚动，当前句用强调色加粗；越远越淡，减少视觉噪音
 - 点歌词任意一行直接跳到该句（走 MPRIS `SetPosition`，不是模拟按键）
 - 拖动进度条松手才真正跳转，拖动过程中只更新显示
@@ -101,6 +109,7 @@ systemctl --user restart plasma-plasmashell.service
 - 弹窗里点任意一句歌词，直接跳到那一句；拖进度条同理。
 - 右键小组件 → **配置**：
   - 面板：单行 / 双行、是否显示音符图标、无音乐时是否收起、最大宽度、字号
+  - 弹窗布局：经典 / 播放器
   - 歌词来源：播放器自带 / 本地 `.lrc` / LRCLIB 三个开关，以及额外的歌词目录
   - 弹窗：是否显示播放控制
   - 跟随播放器：默认「自动（正在播放的那个）」，也可以固定某一个
@@ -149,13 +158,14 @@ systemctl --user restart plasma-plasmashell.service
 - 卡片、徽标、分隔线：由 `textColor` 派生极低透明度
 - 主按钮的图标颜色按强调色亮度自动选深/浅，强调色换成亮黄也看得清
 
-`docs/images/screenshot.png` 是在 Orchis-dark 主题下、真实 plasmashell 环境里截的；两张面板图是离屏渲染，用同一套深色配色，所以两者看起来是一组。
+四张图全部由 `./tools/render-preview.sh` 离屏渲染，用的是同一套深色配色：`plasmashell` 之外没有「弹窗」这一层，所以脚本自己铺了一张模拟弹窗底 —— 只有底是画的，里面的界面、数据、排版都是真的。
 
 想自己出图：
 
 ```bash
 cmake --build build -j$(nproc)
-./tools/render-preview.sh          # 面板两张图写进 docs/images/
+./tools/render-preview.sh          # 2 倍图，直接覆盖 docs/images/
+SCALE=1 ./tools/render-preview.sh  # 1 倍图，快速看布局
 ```
 
 ## 开发与测试

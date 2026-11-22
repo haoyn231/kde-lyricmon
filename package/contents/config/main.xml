@@ -46,6 +46,10 @@
     <entry name="preferredPlayer" type="String">
       <default></default>
     </entry>
+    <!-- 弹窗布局：stacked = 信息在上歌词在下；player = 封面在左歌词在右 -->
+    <entry name="popupLayout" type="String">
+      <default>stacked</default>
+    </entry>
     <!-- 弹窗里的播放控制（上一首 / 播放暂停 / 下一首） -->
     <entry name="showControls" type="Bool">
       <default>true</default>

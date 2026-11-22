@@ -20,6 +20,7 @@ Kirigami.FormLayout {
     property alias cfg_useOnlineLyrics: onlineLyricsCheck.checked
     property alias cfg_extraLyricsDir: dirField.text
     property alias cfg_showControls: controlsCheck.checked
+    property alias cfg_popupLayout: layoutBox.currentValue
     property string cfg_preferredPlayer
 
     Kirigami.Separator {
@@ -114,6 +115,26 @@ Kirigami.FormLayout {
     Kirigami.Separator {
         Kirigami.FormData.isSection: true
         Kirigami.FormData.label: i18n("弹窗与播放器")
+    }
+
+    PlasmaComponents3.ComboBox {
+        id: layoutBox
+        Kirigami.FormData.label: i18n("弹窗布局：")
+        textRole: "text"
+        valueRole: "value"
+        Layout.preferredWidth: Kirigami.Units.gridUnit * 20
+        model: [
+            { text: i18n("经典：信息在上，歌词在下"), value: "stacked" },
+            { text: i18n("播放器：封面在左，歌词在右"), value: "player" }
+        ]
+    }
+
+    PlasmaComponents3.Label {
+        text: i18n("「播放器」布局把封面放大到左侧，歌名、艺术家、专辑压在封面底部，右侧是滚动歌词；弹窗也会更宽一些。")
+        font: Kirigami.Theme.smallFont
+        opacity: 0.65
+        Layout.maximumWidth: Kirigami.Units.gridUnit * 22
+        wrapMode: Text.WordWrap
     }
 
     PlasmaComponents3.CheckBox {

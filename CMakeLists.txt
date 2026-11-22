@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(kde-lyrics VERSION 0.1.0 LANGUAGES CXX)
+project(kde-lyrics VERSION 0.2.0 LANGUAGES CXX)
 
 # 小程序「关于」对话框读的是 package/metadata.json 里的 Version，而标签和构建走
 # 的是 CMake 的 project() 版本。两处版本漂移过一次就会一直对不上，所以在这里直接

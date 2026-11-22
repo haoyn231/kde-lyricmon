@@ -96,12 +96,10 @@ int main(int argc, char *argv[])
     view.show();
 
     const int waitMs = parser.value(waitOpt).toInt();
-    QTimer::singleShot(waitMs, &app, [&view, output, scale = parser.value(scaleOpt).toDouble()]() {
-        QImage image = view.grabWindow();
-        if (scale > 1.0) {
-            image = image.scaled(image.size() * scale, Qt::IgnoreAspectRatio,
-                                 Qt::SmoothTransformation);
-        }
+    QTimer::singleShot(waitMs, &app, [&view, output]() {
+        // 想要 2 倍图就用 QT_SCALE_FACTOR=2（真高 DPI 渲染），不要在这里对图像
+        // 做二次缩放 —— 那样得到的是糊的，不是清晰的 2 倍图
+        const QImage image = view.grabWindow();
         if (!image.save(output)) {
             QTextStream(stderr) << "failed to save " << output << "\n";
             QGuiApplication::exit(1);

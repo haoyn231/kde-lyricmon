@@ -47,14 +47,25 @@ Item {
     onCurrentIndexChanged: root.follow()
     Component.onCompleted: Qt.callLater(root.follow)
 
+    // 首次布局完成、或弹窗高度变化（比如换了布局）之后要重新居中，
+    // 否则第一次 positionViewAtIndex 是按旧尺寸算的，当前句会偏掉
+    onHeightChanged: Qt.callLater(root.follow)
+
+    // 两种弹窗布局之间切换时，列表是被隐藏再显示的，得重新居中一次
+    onVisibleChanged: {
+        if (visible) {
+            Qt.callLater(root.follow);
+        }
+    }
+
     // ---------------------------------------------------------------- 同步歌词
     ListView {
         id: view
         anchors.fill: parent
         // 上下留一点余量：滚动时首尾那半行会贴着分隔线/进度条被硬切，
         // 留白之后观感上只是一个"渐隐的边"，不至于像被裁掉
-        anchors.topMargin: Math.round(Kirigami.Units.gridUnit * 0.3)
-        anchors.bottomMargin: Math.round(Kirigami.Units.gridUnit * 0.3)
+        anchors.topMargin: Math.round(Kirigami.Units.gridUnit * 0.45)
+        anchors.bottomMargin: Math.round(Kirigami.Units.gridUnit * 0.45)
         visible: root.hasSynced
         clip: true
         model: Lyrics.lines

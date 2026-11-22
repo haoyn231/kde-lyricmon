@@ -1,8 +1,12 @@
 // SPDX-FileCopyrightText: 2026 haoyn231
 // SPDX-License-Identifier: MIT
 //
-// 弹窗：封面 + 曲目信息 → 滚动歌词 → 进度 → 播放控制。
-// 颜色全部来自 Kirigami.Theme，明暗主题切换即时生效，没有写死任何前景/背景色。
+// 弹窗。两种布局：
+//   stacked（默认）：信息在上、歌词在中、进度与控制在下
+//   player：封面在左（元信息压在封面上）+ 进度与控制，歌词在右
+//
+// 颜色全部来自 Kirigami.Theme，明暗主题切换即时生效；唯一写死的白色是压在
+// 封面图片上的文字（那里必须靠渐隐保证可读，和主题无关）。
 
 import QtQuick
 import QtQuick.Layouts
@@ -14,7 +18,10 @@ PlasmaExtras.Representation {
     id: page
 
     property bool showControls: true
+    // stacked / player
+    property string layoutMode: "stacked"
 
+    readonly property bool playerMode: page.layoutMode === "player"
     readonly property var player: Mpris.active
     readonly property bool hasTrack: page.player !== null && page.player.title.length > 0
     readonly property color textColor: Kirigami.Theme.textColor
@@ -22,29 +29,24 @@ PlasmaExtras.Representation {
     readonly property color faintColor: Qt.rgba(textColor.r, textColor.g, textColor.b, 0.4)
     readonly property color hairline: Qt.rgba(textColor.r, textColor.g, textColor.b, 0.12)
 
-    Layout.minimumWidth: Kirigami.Units.gridUnit * 22
-    Layout.preferredWidth: Kirigami.Units.gridUnit * 25
-    Layout.maximumWidth: Kirigami.Units.gridUnit * 34
-    Layout.minimumHeight: Kirigami.Units.gridUnit * 20
-    Layout.preferredHeight: Kirigami.Units.gridUnit * 27
-
-    function sourceText() {
-        switch (Lyrics.source) {
-        case "player":
-            return i18n("播放器自带");
-        case "local":
-            return i18n("本地 .lrc");
-        case "lrclib":
-            return "LRCLIB";
-        default:
-            return "";
-        }
-    }
+    // 播放器布局要横向铺开，纵向反而可以矮一点
+    Layout.minimumWidth: page.playerMode ? Kirigami.Units.gridUnit * 33
+                                         : Kirigami.Units.gridUnit * 22
+    Layout.preferredWidth: page.playerMode ? Kirigami.Units.gridUnit * 42
+                                           : Kirigami.Units.gridUnit * 25
+    Layout.maximumWidth: page.playerMode ? Kirigami.Units.gridUnit * 58
+                                         : Kirigami.Units.gridUnit * 34
+    Layout.minimumHeight: page.playerMode ? Kirigami.Units.gridUnit * 19
+                                          : Kirigami.Units.gridUnit * 20
+    Layout.preferredHeight: page.playerMode ? Kirigami.Units.gridUnit * 26
+                                            : Kirigami.Units.gridUnit * 27
 
     contentItem: Item {
+        // ------------------------------------------------ 经典布局
         ColumnLayout {
             anchors.fill: parent
             anchors.margins: Math.round(Kirigami.Units.gridUnit * 0.8)
+            visible: !page.playerMode
             spacing: Kirigami.Units.largeSpacing
 
             // ---------------- 头部：封面 + 曲目 + 来源 ----------------
@@ -99,26 +101,8 @@ PlasmaExtras.Representation {
                     Layout.alignment: Qt.AlignTop
                     spacing: Math.round(Kirigami.Units.smallSpacing * 0.6)
 
-                    // 歌词来源徽标：能一眼看出这句是播放器给的、本地文件，
-                    // 还是刚从 LRCLIB 拉下来的
-                    Rectangle {
+                    SourceBadge {
                         Layout.alignment: Qt.AlignRight
-                        visible: Lyrics.state === "ready" || Lyrics.state === "instrumental"
-                        implicitWidth: badgeLabel.implicitWidth + Kirigami.Units.smallSpacing * 2.4
-                        implicitHeight: Math.round(Kirigami.Units.gridUnit * 1.35)
-                        radius: height / 2
-                        color: Qt.rgba(page.textColor.r, page.textColor.g, page.textColor.b, 0.08)
-                        border.width: 1
-                        border.color: page.hairline
-
-                        Text {
-                            id: badgeLabel
-                            anchors.centerIn: parent
-                            text: Lyrics.state === "instrumental" ? i18n("纯音乐") : page.sourceText()
-                            color: page.dimColor
-                            font.pixelSize: Math.round(Kirigami.Units.gridUnit * 0.54)
-                            font.weight: Font.DemiBold
-                        }
                     }
 
                     // 多个播放器时标出当前跟的是谁（切换在设置里）
@@ -186,6 +170,18 @@ PlasmaExtras.Representation {
                 }
 
                 Item { Layout.fillWidth: true }
+            }
+        }
+
+        // ------------------------------------------------ 播放器布局
+        Loader {
+            anchors.fill: parent
+            anchors.margins: Math.round(Kirigami.Units.gridUnit * 0.8)
+            active: page.playerMode
+            visible: active
+
+            sourceComponent: PlayerLayout {
+                showControls: page.showControls
             }
         }
     }
